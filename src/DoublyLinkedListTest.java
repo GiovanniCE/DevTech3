@@ -47,14 +47,29 @@ public class DoublyLinkedListTest {
 
     // Tests for getLast
 
-    // Tests for isEmpty
+    // Tests for isEmpty (2)
 
     /**
-     * @author
-     * @see
+     * @author Giovanni Coronado-Esbona
+     * @see IsEmptyAlwaysFalse
      */
     @Test
     public void testIsEmptyWhenCreated() {
+        if (SHOULD_FAIL) list = new IsEmptyAlwaysFalse<>();
+        
+        assertTrue(list.isEmpty(), "A newly created list should be empty.");
+    }
+
+    /**
+     * @author Giovanni Coronado-Esbona
+     * @see IsEmptyAlwaysTrue
+     */
+    @Test
+    public void testIsNotEmptyAfterAdd() {
+        if (SHOULD_FAIL) list = new IsEmptyAlwaysTrue<>();
+        
+        list.addLast(1);
+        assertFalse(list.isEmpty(), "List should not be empty after adding an element.");
     }
 
     // Tests for add
@@ -106,7 +121,68 @@ public class DoublyLinkedListTest {
     // Tests for removeLast
 
     // Tests for size
+    /**
+     * @author Giovanni Coronado-Esbona
+     * @see SizeReturnsNonZeroWhenEmpty
+     */
+    @Test
+    public void testSizeWhenCreatedIsZero() {
+        if (SHOULD_FAIL) list = new SizeReturnsNonZeroWhenEmpty<>();
+        
+        assertEquals(0, list.size(), "A newly created list should have size 0.");
+    }
+
+    /**
+     * @author Giovanni Coronado-Esbona
+     * @see SizeFailsToIncrement
+     */
+    @Test
+    public void testSizeIncrementsOnAdd() {
+        if (SHOULD_FAIL) list = new SizeFailsToIncrement<>();
+        
+        list.addLast(10);
+        assertEquals(1, list.size(), "Size should be 1 after adding one element.");
+        
+        list.addLast(20);
+        assertEquals(2, list.size(), "Size should be 2 after adding two elements.");
+    }
+
 
     // Tests for set
+    /**
+     * @author Giovanni Coronado-Esbona
+     * @see SetDoesNotUpdateElement
+     */
+    @Test
+    public void testSetAtIndexValid() {
+        if (SHOULD_FAIL) list = new SetDoesNotUpdateElement<>();
+        
+        list.addLast(10);
+        list.addLast(20);
+        list.addLast(30);
+        
+        Integer oldValue = list.set(1, 25);
+        assertEquals(20, oldValue, "set() should return the old value.");
+        
+        // The list should now contain the new element at the specified index
+        assertEquals(25, list.get(1), "The element at the specified index should be updated to the new value.");
+    }
 
+    /**
+     * @author Giovanni Coronado-Esbona
+     * @see SetAtOutOfBoundsDoesNotThrow
+     */
+    @Test
+    public void testSetAtOutOfBoundsThrowsException() {
+        if (SHOULD_FAIL) list = new SetAtOutOfBoundsDoesNotThrow<>();
+        
+        list.addLast(100);
+        
+        assertThrows(IndexOutOfBoundsException.class, () -> list.set(-1, 99), 
+                "Setting an element at a negative index should throw IndexOutOfBoundsException.");
+        
+        // Test index equal to size (out of bounds for 0-indexed list)
+        assertThrows(IndexOutOfBoundsException.class, () -> list.set(1, 99), 
+                "Setting an element at an index equal to size should throw IndexOutOfBoundsException.");
+    }
 }
